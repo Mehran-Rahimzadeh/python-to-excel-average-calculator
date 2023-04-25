@@ -7,14 +7,15 @@ clear()
 # importing pyhton list to exell file module
 import xlsxwriter
 
-# creat empty dics for student names and ther cours 
-firstStudent= dict(firstName="" , lastName = "", courses=[], credits=[], marks=[])
+# creat empty list for student names and ther cours 
+a=[]
+student=0
+
 
 
 # asking funxtion
 def ask():
-    
-    print(firstStudent)
+    globals()["student"]= dict(firstName="" , lastName = "", courses=[], credits=[], marks=[])
     name_ask()
     courses_ask()
     next_step_student()
@@ -22,14 +23,15 @@ def ask():
 
 # getting first and last name
 def name_ask():
-    firstStudent["firstName"]=input("Enter the student name: ")
-    firstStudent["lastName"]=input ("Enter the student last name: ")
+    student["firstName"]=input("Enter the student name: ")
+    student["lastName"]=input ("Enter the student last name: ")
+
 
 # getting courses
 def courses_ask():
-    firstStudent["courses"].append(input ("Enter the student course: "))
-    firstStudent["credits"].append(int(input ("Enter the course credit: ")))
-    firstStudent["marks"].append(float(input ("Enter the course mark: ")))
+    student["courses"].append(input ("Enter the student course: "))
+    student["credits"].append(int(input ("Enter the course credit: ")))
+    student["marks"].append(float(input ("Enter the course mark: ")))
     next_step_courses()
 
 
@@ -48,57 +50,30 @@ def next_step_courses():
 def next_step_student():
     answer=ord(input('Is there any other students? y/n: '))
     if answer==121:
+        a.append(student)
         ask()
     else:
-        return
+        a.append(student)
+        print(*a, sep="\n")
     
 
 
 
+def make_title_exell():
+    new_list = [['First Names', 'Last Names', "courses", "credits", "Marks"]]
+    with xlsxwriter.Workbook('test.xlsx') as workbook:
+        worksheet = workbook.add_worksheet()
+
+        for row_num, data in enumerate(new_list):
+            worksheet.write_row(row_num, 0, data)
+
+        for row_num, data in enumerate(new_list):
+            worksheet.write_row(row_num, 0, data)
+
+
+
+
 ask()
-print(firstStudent)
+make_title_exell()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# new_list = [['First Names', 'Last Names', "courses", "credits", "Marks"]]
-
-# with xlsxwriter.Workbook('test.xlsx') as workbook:
-#     worksheet = workbook.add_worksheet()
-
-#     for row_num, data in enumerate(new_list):
-#         worksheet.write_row(row_num, 0, data)
-
-#     for row_num, data in enumerate(new_list_0):
-#         worksheet.write_row(row_num, 0, data)
 
