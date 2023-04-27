@@ -4,11 +4,13 @@ clear=lambda: os.system("clear")
 clear()
 # ---------------------
 
-
+import openpyxl 
+from openpyxl import Workbook
+from openpyxl import load_workbook
 # creat empty list for student names and ther cours 
 data=[]
 student=0
-
+number = 3
 
 #asking funxtion
 def ask():
@@ -20,7 +22,9 @@ def ask():
 
 
 # ---------getting first and last name--------
+
 def name_ask():
+    
     student["firstName"]=input("Enter the student name: ")
     student["lastName"]=input ("Enter the student last name: ")
 
@@ -29,7 +33,7 @@ def name_ask():
 def courses_ask():
     student["courses"].append(input ("Enter the student course: "))
     student["credits"].append(int(input ("Enter the course credit: ")))
-    student["scores"].append(float(input ("Enter the course scores: ")))
+    student["scores"].append(int(input ("Enter the course scores: ")))
     next_step_courses()
 
 
@@ -47,16 +51,15 @@ def next_step_courses():
 
     # input method (courses)
 def next_step_student():
-    # student["courses"]=str(student["courses"])
-    # student["credits"]=str(student["credits"])
-    # student["scores"]=str(student["scores"])
-
+   
+    global number
     student["courses"]=( ", ".join( repr(e) for e in student["courses"]) )
     student["credits"]=( ", ".join( repr(e) for e in student["credits"] ) )
     student["scores"]=( ", ".join( repr(e) for e in student["scores"] ) )
     answer=ord(input('Is there any other students? y/n: '))
     if answer==121:
         data.append(student)
+        number= number +1
         ask()
     else:
         data.append(student)
@@ -65,9 +68,7 @@ def next_step_student():
 ask()
 # make_title_exell()
 
-import openpyxl 
-from openpyxl import Workbook
-from openpyxl import load_workbook
+
 
 row = 0
 col = 0
@@ -86,7 +87,7 @@ def create_xls(filepath):
 def write_xls(filepath, dictionary):
     wb = load_workbook(filepath)
     ws = wb.active
-
+   
     headers = [x for x in dictionary[0]]
     for index, value in enumerate(headers):
          ws.cell(row=1, column=index+1).value = value
@@ -96,7 +97,7 @@ def write_xls(filepath, dictionary):
         for idx,value in enumerate(x.values()):
             ws.cell(row=i+2, column=idx+1).value = value
     wb.save(filepath)
-
+ws.cell(row=25, column=1).value = len(data)
 create_xls("example_op.xlsx")
 write_xls("example_op.xlsx", data)
 
@@ -111,44 +112,74 @@ for row in ws["A1:E1"]:
 
 
 
-#----------------------------Writing Data in to an Exell file-----
-#                --------------------------------------------------
-#                              -------------------------------
-
-
-# #Create an new Excel file and add a worksheet.
-# workbook=xlsxwriter.Workbook("karnameh_1.xlsx")
-# worksheet = workbook.add_worksheet()
-
-# # Widen the first column to make the text clearer.
-# worksheet.set_column("A:A", 10)
-# worksheet.set_column("B:B", 10)
-# worksheet.set_column("C:C", 40)
-# worksheet.set_column("D:D", 20)
-# worksheet.set_column("E:E", 20)
-
-# # Add a bold format to use to highlight cells.
-# bold = workbook.add_format({"bold":True})
-
-
-# # Write some header.
-# worksheet.write('A1', "First Name", bold)
-# worksheet.write('B1', 'Last Name', bold)
-# worksheet.write('C1', 'Courses', bold)
-# worksheet.write('D1', 'Credits', bold)
-# worksheet.write('E1', 'Scores', bold)
-
-
-# workbook.close()
-
-
 
 # ---------------------------------Inserting Data in Exell file and make version 2-------------------
+# ---------------------------------Inserting Data in Exell file and make version 2-------------------
+
+    # workbook object is created
+path = "./example_op.xlsx"
+wb_obj = openpyxl.load_workbook(path)
+
+# Get workbook active sheet object
+sheet_obj = wb_obj.active
+sheet_obj.cell(row=1, column=6).value = "Average"
+   
+#  converting credits from string in to list of integers--
+    
+def str_list_credits(s):
+    
+    cell_obj = sheet_obj.cell(row = s, column = 4)
+    credit_list=[]
+    # Print value of cell object
+    # using the value attribute
+    co = cell_obj.value
+    b=co.replace(" ","")
+    bb= list((b.replace(",","")))
+    credit_list=[]
+    for i in range (len(bb)):
+        credit_list.append(int(bb[i]))
+    return credit_list
+
+#  converting scores from string in to list of integers--
+def str_listt_scores(s):
+    
+    cell_obj = sheet_obj.cell(row = s, column = 5)
+    score_list=[]
+    # using the value attribute
+    co = cell_obj.value
+    k=co.replace(" ","")
+    kk= list((k.replace(",","" "")))
+    kkk=[]
+    score_list=[]
+    for i in range (len(kk)):
+        kkk.append(int(kk[i]))
+    
+    for j in range (((len(kkk)-1)//2)+1):
+        t=2*j            
+        score_list.append(kkk[t]*10+kkk[t+1])
+    return score_list
+# ----- calculating average
+def average_calculator(s):
+    
+    x=str_list_credits(s)
+    y=str_listt_scores(s)
+    m =[]
+    n=sum(x)
+    for i in range (len(x)):
+        m.append(x[i]*y[i])
+    average= float((sum(m))/n)
+    average=round(average,2)
+
+    sheet_obj.cell(row= s, column=6 ).value = average
+    wb_obj.save(path)
+ 
+
+def average(s):
+    
+    for s in range (2, s):
+         str_list_credits(s)
+         str_listt_scores(s)
+         average_calculator(s)
 
 
-# from openpyxl import Workbook
-# #wb = Workbook()
-
-# # open workbook
-# from openpyxl import load_workbook
-# wb = load_workbook(filename = 'karnameh_1.xlsx')
+average(number)
