@@ -28,22 +28,22 @@ def ask():
 
 def name_ask():
     
-    student["firstName"]=input("\nEnter the student name: ")
-    student["lastName"]=input ("\nEnter the student last name: ")
+    student["firstName"]=input("Enter the student name: ")
+    student["lastName"]=input ("Enter the student last name: ")
     
 
 #--------------getting courses---------
 def courses_ask():
     global co
-    cou=input ("\nEnter the student course: ")
+    cou=input ("Enter the student course: ")
     if cou in co:
         print(" You have inseted this cours befor!")
     else: 
         co.append(cou)
     
         student["courses"].append(cou)
-        student["credits"].append(int(input ("\nEnter the course credit: ")))
-        student["scores"].append(int(input ("\nEnter the course scores: ")))
+        student["credits"].append(int(input ("Enter the course credit: ")))
+        student["scores"].append(int(input ("Enter the course scores: ")))
     next_step_courses()
 
 
