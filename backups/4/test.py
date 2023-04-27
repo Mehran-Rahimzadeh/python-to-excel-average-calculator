@@ -49,13 +49,13 @@ def courses_ask():
     cou=input ("\nEnter the student course: ")
     if cou in co:
         # print(" You have inseted this cours befor!")
-        print(bcolors.WARNING + "Warning: You have inseted this cours before!" + bcolors.ENDC)
+        print(bcolors.WARNING + "Warning: You have inseted this cours befor!" + bcolors.ENDC)
     else: 
         co.append(cou)
     
         student["courses"].append(cou)
         student["credits"].append(int(input ("\nEnter the course credit: ")))
-        student["scores"].append(int(input ("\nEnter the course score: ")))
+        student["scores"].append(int(input ("\nEnter the course scores: ")))
     next_step_courses()
 
 
@@ -211,7 +211,7 @@ def average(s):
          average_calculator(s)
 
 
-calc=ord(input('\nDo you want to calculat the average\n  and report as an Exelle file' + bcolors.OKGREEN +' ("result.xlsx")'+ bcolors.ENDC+') ? y/n: '))
+calc=ord(input('\nDo yo want to calculat the average\n  and report as an Exelle file' + bcolors.OKGREEN +' ("result.xlsx")'+ bcolors.ENDC+') ? y/n: '))
 if calc==121:
     average(number)
 else: 

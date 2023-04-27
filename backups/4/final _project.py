@@ -7,7 +7,18 @@ clear()
 import openpyxl 
 from openpyxl import Workbook
 from openpyxl import load_workbook
+
 # creat empty list for student names and ther cours 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 data=[]
 student=0
 number = 3
@@ -37,7 +48,8 @@ def courses_ask():
     global co
     cou=input ("\nEnter the student course: ")
     if cou in co:
-        print(" You have inseted this cours befor!")
+        # print(" You have inseted this cours befor!")
+        print(bcolors.WARNING + "Warning: You have inseted this cours befor!" + bcolors.ENDC)
     else: 
         co.append(cou)
     
@@ -51,7 +63,7 @@ def courses_ask():
 
  # input method (courses)
 def next_step_courses():
-    answer=ord(input('Is there any other courses? y/n: '))
+    answer=ord(input('\nIs there any other courses? y/n: '))
     if answer==121:
         courses_ask()
     else:
@@ -66,18 +78,24 @@ def next_step_student():
     student["courses"]=( ", ".join( repr(e) for e in student["courses"]) )
     student["credits"]=( ", ".join( repr(e) for e in student["credits"] ) )
     student["scores"]=( ", ".join( repr(e) for e in student["scores"] ) )
-    answer=ord(input('Is there any other students? y/n: '))
+    answer=ord(input('\nIs there any other students? y/n: '))
     if answer==121:
         data.append(student)
         number= number +1
+        print(bcolors.OKBLUE + "\n----------------------------------" + bcolors.ENDC)
         ask()
     else:
         data.append(student)
-        print(*data, sep="\n")
+    answer_print=ord(input('\nDo you want to have data as an Exelle file('+ bcolors.OKGREEN+' ("data.xlsx")'+ bcolors.ENDC+') ? y/n: '))
+    if answer_print==121:
+        pass
+    else:
+        exit()
+        # print(*data, sep="\n")
 
 ask()
-# make_title_exell()
-
+# -----------------------make_exell()-------------------------------------------------------------
+# -----------------------make_exell()-------------------------------------------------------------
 
 
 row = 0
@@ -108,8 +126,8 @@ def write_xls(filepath, dictionary):
             ws.cell(row=i+2, column=idx+1).value = value
     wb.save(filepath)
 ws.cell(row=25, column=1).value = len(data)
-create_xls("example_op.xlsx")
-write_xls("example_op.xlsx", data)
+create_xls("data.xlsx")
+write_xls("data.xlsx", data)
 
 # ----------sheet style-----
 from openpyxl.styles import Font
@@ -123,16 +141,17 @@ for row in ws["A1:E1"]:
 
 
 
-# ---------------------------------Inserting Data in Exell file and make version 2-------------------
-# ---------------------------------Inserting Data in Exell file and make version 2-------------------
+# ---------calculating average from Data  and put the result in Exell file -----
+# -------------------------------------------------------------------------------
 
     # workbook object is created
-path = "./example_op.xlsx"
-wb_obj = openpyxl.load_workbook(path)
+data_path = "./data.xlsx"
+result_path= "./result.xlsx"
+wb_obj = openpyxl.load_workbook(data_path)
 
 # Get workbook active sheet object
 sheet_obj = wb_obj.active
-sheet_obj.cell(row=1, column=6).value = "Average"
+sheet_obj.cell(row=1, column=7).value = "Average"
    
 #  converting credits from string in to list of integers--
     
@@ -180,8 +199,8 @@ def average_calculator(s):
     average= float((sum(m))/n)
     average=round(average,2)
 
-    sheet_obj.cell(row= s, column=6 ).value = average
-    wb_obj.save(path)
+    sheet_obj.cell(row= s, column=7 ).value = average
+    wb_obj.save(result_path)
  
 
 def average(s):
@@ -192,4 +211,8 @@ def average(s):
          average_calculator(s)
 
 
-average(number)
+calc=ord(input('\nDo yo want to calculat the average\n  and report as an Exelle file' + bcolors.OKGREEN +' ("result.xlsx")'+ bcolors.ENDC+') ? y/n: '))
+if calc==121:
+    average(number)
+else: 
+    exit()
